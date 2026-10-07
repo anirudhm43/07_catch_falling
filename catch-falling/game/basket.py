@@ -14,10 +14,22 @@ class Basket:
         self.speed = speed
         self.boosted_frames = 0
         self.normal_speed = speed
-        self.boost_speed = speed
+        self.boost_speed = speed * 2
+        self.boost_duration = 150
 
     def get_rect(self):
         return pygame.Rect(
             int(self.x - self.width / 2), int(self.y - self.height / 2),
             self.width, self.height,
         )
+        
+    def activate_boost(self):
+        if self.boosted_frames <= 0:
+            self.boosted_frames = self.boost_duration
+            self.speed = self.boost_speed
+
+    def update(self):
+        if self.boosted_frames > 0:
+            self.boosted_frames -= 1
+            if self.boosted_frames <= 0:
+                self.speed = self.normal_speed

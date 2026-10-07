@@ -60,10 +60,14 @@ class GameEngine:
     def handle_keydown(self, key):
         if self.game_over and key == pygame.K_r:
             self.__init__()
+        elif not self.game_over and key == pygame.K_SPACE:
+            self.basket.activate_boost()
 
     def update(self):
         if self.game_over:
             return
+        
+        self.basket.update()
 
         self.frames_until_spawn -= 1
         if self.frames_until_spawn <= 0:
@@ -93,6 +97,8 @@ class GameEngine:
         renderer.draw_scene(surface, self.basket, self.objects)
         renderer.draw_text(surface, font, f"Score: {self.score}", (10, 10))
         renderer.draw_text(surface, font, f"Misses: {self.misses}/{MAX_MISSES}", (10, 36))
+        if self.basket.boosted_frames > 0:
+            renderer.draw_text(surface, font, "SPEED BOOST ACTIVE!", (10, 62))
 
         if self.game_over:
             renderer.draw_banner(surface, font, f"Game Over! Final score: {self.score}. Press R to restart.")
